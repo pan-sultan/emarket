@@ -8,20 +8,10 @@ class AppDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          _createHeader(),
           _createMagaziesItem(context),
           _createSearchItem(context),
           _createContactsItem(context),
         ],
-      ),
-    );
-  }
-
-  Widget _createHeader() {
-    return DrawerHeader(
-      child: Text(''),
-      decoration: BoxDecoration(
-        color: Colors.green,
       ),
     );
   }
