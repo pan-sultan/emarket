@@ -63,6 +63,7 @@ func HandleFile(realPath, urlPath string, w http.ResponseWriter, r *http.Request
 	}
 	w.Header().Set("Content-Type", ctype)
 	w.Header().Set("Last-Modified", stat.ModTime().UTC().Format(http.TimeFormat))
+	w.Header().Set("Content-Disposition", "inline")
 	_, err = io.Copy(w, fd)
 	if err != nil {
 		log.Error(err.Error())
