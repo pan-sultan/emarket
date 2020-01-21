@@ -2,10 +2,9 @@ package main
 
 import (
 	"emarket/log"
+	"emarket/utils"
 	"net/http"
-	"path"
 	"path/filepath"
-	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -29,20 +28,17 @@ func init() {
 }
 
 func main() {
-	if err := rootCmd.Execute(); err != nil {
+	err := rootCmd.Execute()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	staticDir, err = filepath.Abs(staticDir)
+	if err != nil {
 		log.Fatal(err.Error())
 	}
 	staticURL := "/static/"
 	http.HandleFunc(staticURL, func(w http.ResponseWriter, r *http.Request) {
-		suffix := strings.Replace(r.URL.Path, staticURL, "/", 1)
-		fullPath, err := filepath.Abs(path.Join(staticDir, suffix))
-		if err != nil {
-			log.Error(err.Error())
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
-		log.Debug(fullPath)
-		//http.FileServer(http.Dir(staticDir)).ServeHTTP(w, r)
+		utils.HandleFile(staticDir, staticURL, w, r)
 	})
 	log.Fatal(http.ListenAndServe(":8080", nil).Error())
 }
